@@ -1,4 +1,5 @@
-// THE MATRIX EFFECT
+// THE MATRIX CODE EFFECT
+// (c) 2022 by Erick Levy
 
 // Optional sets of characters
 const ROMAN_CHARS = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789!#$%&+-*/^~[]{}()¿?¡!';
@@ -17,7 +18,8 @@ const FONT_SIZE = 12;
 const MILISECONDS = 50;
 
 // Used to calculate the trail color
-const TRAILS = "f9630";
+// e.g. 'fc9630' makes a trail of six steps from #fff (white), #cfc, #9f9, #6f6, #3f3, to #0f0 (green)
+const TRAILS = 'f0';
 
 // Get the draw context for the canvas
 const canvas = document.getElementById('matrix-canvas');
@@ -52,15 +54,15 @@ class Column {
 // Array of columns
 const cols = Math.floor(w / TILE_SIZE) + 1;
 const arrCols = [];
-for (c = 0; c < cols; c++) { arrCols.push(new Column()) }
+for (let i = 0; i < cols; i++) { arrCols.push(new Column()) }
 
 /**
- * Create the matriz effect
+ * Create the matriz effect generating the char, updating positions and displaying each column
  */
 function matrix() {
 
     // Fade to black
-    ctx.fillStyle = '#0001';
+    ctx.fillStyle = '#0001'; // The fourth number is the alpha or opacity component
     ctx.fillRect(0, 0, w, h);
 
     // Set the font family and size
@@ -68,26 +70,29 @@ function matrix() {
 
     // Update columns
     arrCols.forEach((item, index) => {
-        const text = pickOne(MATRIX_CHARS);
+        const m = pickOne(MATRIX_CHARS);
         const x = index * TILE_SIZE;
         const y = item.y;
         // Trail generation
-        let tpos = item.trail.length;
-        while (tpos > 0) {
-            tpos -= 1;
-            if (tpos == 0) {
-                item.trail[tpos] = text;
+        let t = item.trail.length;
+        // This cycle goes from the last to the first element in the trail
+        while (t > 0) {
+            t -= 1;
+            if (t > 0) {
+                // Copy the matrix char from previous trail positions
+                item.trail[t] = item.trail[t - 1];
             } else {
-                item.trail[tpos] = item.trail[tpos - 1];
+                // Use the new one in first position
+                item.trail[t] = m;
             }
-            if (item.trail[tpos] > '') {
-                let c = TRAILS[tpos];
+            // If there is a matrix char in this trail position
+            if (item.trail[t] > '') {
+                let c = TRAILS[t];
                 ctx.fillStyle = `#${c}f${c}`;
-                ctx.fillText(item.trail[tpos], x, y - tpos * TILE_SIZE);
+                ctx.fillText(item.trail[t], x, y - t * TILE_SIZE);
             }
-
         }
-        // Check column position (plus a random bias) to reset or increment
+        // Check this column position (plus a random bias) to determine whether to reset or increment
         if (y > h + Math.random() * h) {
             arrCols[index].y = 0;
         } else {
@@ -102,13 +107,13 @@ function matrix() {
  * @returns {string} The char picked
  */
 function pickOne(chars) {
-    const l = chars.length;
-    return chars[Math.floor(Math.random() * l)];
+    return chars[Math.floor(Math.random() * chars.length)];
 }
 
-// Initielize the interval to call the matrix effect
+// Initialize the interval to call the matrix dode effect
 setInterval(matrix, MILISECONDS);
 
+// Reloads when windows size changes to readjust the canvas size
 window.onresize = () => { location.reload() }
 
 // End of code.
