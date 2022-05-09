@@ -1,9 +1,9 @@
 # matrix
 The Matrix Code Effect
 
-This small project should perhaps be in the canvas repository,
-but I wanted to give it its own section now that the movie
-it is inspired by is back in trend.
+This little project should maybe be in my canvas repository,
+but I wanted to highlight it now that the movie this effect 
+is inspired by is trending again.
 
 Nothing new, since it is a visual effect that I have already 
 seen implemented in the old screensavers for Windows with 
