@@ -13,6 +13,6 @@ trick to generate a trail from white to green.
 
 I hope you find it interesting and entertaining as it was for me!
 
-Screenshot #1
+Screenshot #1:
 
 ![Screenshot 1](matrix.png)
