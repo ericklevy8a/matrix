@@ -5,25 +5,47 @@
 const ROMAN_CHARS = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789!#$%&+-*/^~[]{}()¿?¡!';
 const CYRILLIC_CHARS = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЩЮЯ';
 const JAPANESE_CHARS = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモユヨラリルレロワヰヱヲン〇一二三四五六七八九十';
-const COREAN_CHARS = 'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㄲㄸㅃㅆㅉ';
+const KOREAN_CHARS = 'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㄲㄸㅃㅆㅉ';
+const CUSTOM_CHARS = 'HILLARY';
 
 // Selected set(s) of characters (concatenate to use two or more)
 const MATRIX_CHARS = JAPANESE_CHARS;
 
-// Size of code
+// Custom colors for the trail of chars
+
+const COLOR_SCHEMES = {
+
+    MATRIX: {
+        r: 'f0',
+        g: 'ff',
+        b: 'f0',
+    },
+
+    GAY_PRIDE: {
+        r: 'fff000f0',
+        g: 'f0fff00f',
+        b: 'f000fff0',
+    },
+
+}
+
+// Selectaed trail color scheme (default MATRIX)
+const TRAIL_COLOR = COLOR_SCHEMES.GAY_PRIDE;
+
+// Size of code (default 12 px)
 const TILE_SIZE = 12;
 const FONT_SIZE = 12;
 
-// Interval for animation
+// Interval for animation (default 50ms)
 const MILISECONDS = 50;
-
-// Used to calculate the trail color
-// e.g. 'fc9630' makes a trail of six steps from #fff (white), #cfc, #9f9, #6f6, #3f3, to #0f0 (green)
-const TRAILS = 'f0';
+// Animation interval timer (initially null)
+var interval = null;
 
 // Get the draw context for the canvas
 const canvas = document.getElementById('matrix-canvas');
 const ctx = canvas.getContext('2d');
+
+const dec2hex = (dec) => ('0123456789abcdef')[dec % 16];
 
 // Document body adjust
 document.body.style.margin = '0';
@@ -47,7 +69,9 @@ ctx.fillRect(0, 0, w, h);
 class Column {
     constructor() {
         this.y = Math.floor(Math.random() * h);
-        this.trail = Array(TRAILS.length).fill('');
+        this.ymax = h + h / 2 * Math.random();
+        this.color = TRAIL_COLOR;
+        this.trail = Array(Math.max(...Object.values(this.color).map(x => x.length))).fill('');
     }
 }
 
@@ -87,14 +111,17 @@ function matrix() {
             }
             // If there is a matrix char in this trail position
             if (item.trail[t] > '') {
-                let c = TRAILS[t];
-                ctx.fillStyle = `#${c}f${c}`;
+                let r = item.color.r[t < item.color.r.length ? t : item.color.r.length];
+                let g = item.color.g[t < item.color.g.length ? t : item.color.g.length];
+                let b = item.color.b[t < item.color.b.length ? t : item.color.b.length];
+                ctx.fillStyle = `#${r}${g}${b}`;
                 ctx.fillText(item.trail[t], x, y - t * TILE_SIZE);
             }
         }
         // Check this column position (plus a random bias) to determine whether to reset or increment
-        if (y > h + Math.random() * h) {
+        if (y > item.ymax) {
             arrCols[index].y = 0;
+
         } else {
             arrCols[index].y += TILE_SIZE;
         }
@@ -110,10 +137,28 @@ function pickOne(chars) {
     return chars[Math.floor(Math.random() * chars.length)];
 }
 
-// Initialize the interval to call the matrix dode effect
-setInterval(matrix, MILISECONDS);
+// EVENT MANAGEMENT
 
 // Reloads when windows size changes to readjust the canvas size
 window.onresize = () => { location.reload() }
+
+// Detects keyboard codes to pause/play the matrix
+window.onkeyup = (e) => {
+    if (e.code === 'Space' || e.key === 'MediaPlayPause') {
+        togglePlayPause();
+    }
+}
+
+function togglePlayPause() {
+    if (interval !== null) {
+        clearInterval(interval);
+        interval = null;
+    } else {
+        interval = setInterval(matrix, MILISECONDS);
+    }
+}
+
+// Run the matrix
+togglePlayPause();
 
 // End of code.
