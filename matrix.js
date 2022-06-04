@@ -6,10 +6,10 @@ const ROMAN_CHARS = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789!#$%&+-*/^~[]{}()¿?�
 const CYRILLIC_CHARS = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЩЮЯ';
 const JAPANESE_CHARS = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモユヨラリルレロワヰヱヲン〇一二三四五六七八九十';
 const KOREAN_CHARS = 'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㄲㄸㅃㅆㅉ';
-const CUSTOM_CHARS = 'HILLARY';
+const CUSTOM_CHARS = 'CARLOS';
 
 // Selected set(s) of characters (concatenate to use two or more)
-const MATRIX_CHARS = JAPANESE_CHARS;
+const MATRIX_CHARS = JAPANESE_CHARS + KOREAN_CHARS;
 
 // Custom colors for the trail of chars
 
@@ -21,7 +21,7 @@ const COLOR_SCHEMES = {
         b: 'f0',
     },
 
-    PRIDE: {
+    RAINBOW: {
         r: 'fff000f3',
         g: 'f0fff009',
         b: 'f000fff3',
@@ -30,7 +30,7 @@ const COLOR_SCHEMES = {
 }
 
 // Selectaed trail color scheme (default MATRIX)
-const TRAIL_COLOR = COLOR_SCHEMES.PRIDE;
+const TRAIL_COLOR = COLOR_SCHEMES.MATRIX;
 
 // Size of code (default 12 px)
 const TILE_SIZE = 12;
