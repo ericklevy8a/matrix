@@ -21,16 +21,16 @@ const COLOR_SCHEMES = {
         b: 'f0',
     },
 
-    GAY_PRIDE: {
-        r: 'fff000f0',
-        g: 'f0fff00f',
-        b: 'f000fff0',
+    PRIDE: {
+        r: 'fff000f3',
+        g: 'f0fff009',
+        b: 'f000fff3',
     },
 
 }
 
 // Selectaed trail color scheme (default MATRIX)
-const TRAIL_COLOR = COLOR_SCHEMES.GAY_PRIDE;
+const TRAIL_COLOR = COLOR_SCHEMES.PRIDE;
 
 // Size of code (default 12 px)
 const TILE_SIZE = 12;
